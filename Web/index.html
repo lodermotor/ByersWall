@@ -17,20 +17,33 @@
 
     html { scroll-behavior: smooth; }
 
+    /* --- Background + Overlay --- */
     body {
       margin: 0;
-      background-color: var(--black);
-      background-image: url('images/wallpaper.png');
-      background-repeat: repeat;
-      background-size: auto;
-      background-attachment: fixed;
-      background-color: rgba(0,0,0,.94);
-      background-blend-mode: multiply;
+      background: url('images/wallpaper.png') repeat center center / auto;
       color: white;
       font-family: 'Roboto', sans-serif;
       line-height: 1.6;
+      position: relative;
+      overflow-x: hidden;
     }
 
+    /* overlay ensures darkened look across all browsers */
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background-color: rgba(0, 0, 0, 0.85);
+      z-index: -1;
+    }
+
+    /* iOS / Brave Safari fix */
+    @supports (-webkit-touch-callout: none) {
+      body {
+        background-attachment: scroll !important;
+      }
+    }
+
+    /* --- Navigation --- */
     nav {
       position: fixed;
       top: 0;
@@ -41,6 +54,7 @@
       border-bottom: 2px solid var(--red);
       z-index: 1000;
     }
+
     nav ul {
       list-style: none;
       display: flex;
@@ -50,23 +64,27 @@
       padding: 0.5rem;
       gap: 1.2rem;
     }
+
     nav a {
       color: var(--red);
       text-decoration: none;
       font-weight: bold;
       transition: color 0.2s;
     }
+
     nav a.active,
     nav a:hover {
       color: white;
       text-shadow: 0 0 8px var(--red);
     }
 
+    /* --- Hero / Title --- */
     header {
       padding-top: 80px;
       text-align: center;
       margin-bottom: 3rem;
     }
+
     header img {
       width: 80%;
       max-width: 400px;
@@ -74,6 +92,7 @@
       filter: drop-shadow(0 0 10px var(--red));
     }
 
+    /* --- Sections --- */
     section {
       padding: 4rem 1rem;
       max-width: 900px;
@@ -83,11 +102,13 @@
       transform: translateY(30px);
       animation: fadeUp 1s ease forwards;
     }
+
     section:nth-of-type(1) { animation-delay: .2s; }
     section:nth-of-type(2) { animation-delay: .4s; }
     section:nth-of-type(3) { animation-delay: .6s; }
     section:nth-of-type(4) { animation-delay: .8s; }
     section:nth-of-type(5) { animation-delay: 1.0s; }
+
     @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
 
     section h2 {
@@ -102,6 +123,7 @@
       opacity: 0;
       animation: fadeTitle 2s ease forwards;
     }
+
     @keyframes fadeTitle {
       0% { opacity: 0; text-shadow: 0 0 0 var(--red); }
       100% { opacity: 1; text-shadow: 0 0 15px rgba(229,9,20,0.8); }
@@ -113,6 +135,7 @@
       padding: 2rem 1rem;
     }
 
+    /* --- Text Areas + Buttons --- */
     textarea {
       width: 100%;
       min-height: 120px;
@@ -124,10 +147,12 @@
       padding: 0.8rem;
       resize: vertical;
     }
+
     #commInput {
       min-height: 60px;
       resize: none;
     }
+
     #charCount {
       display: block;
       text-align: right;
@@ -147,6 +172,7 @@
       box-shadow: 0 0 10px rgba(229,9,20,0.5);
       transition: all 0.2s;
     }
+
     button:hover {
       transform: scale(1.05);
       box-shadow: 0 0 25px rgba(229,9,20,0.8);
@@ -161,19 +187,23 @@
       max-width: 600px;
       margin: 0 auto;
     }
+
     .toggle-container {
       display: flex;
       justify-content: center;
       gap: 2rem;
       margin-bottom: 1rem;
     }
+
     .toggle {
       position: relative;
       display: inline-block;
       width: 70px;
       height: 34px;
     }
+
     .toggle input { display: none; }
+
     .slider {
       position: absolute;
       cursor: pointer;
@@ -183,6 +213,7 @@
       border: 2px solid var(--red);
       border-radius: 34px;
     }
+
     .slider:before {
       position: absolute;
       content: "SYD";
@@ -198,9 +229,11 @@
       border-radius: 30px;
       transition: .4s;
     }
+
     input:checked + .slider {
       background-color: #222;
     }
+
     input:checked + .slider:before {
       transform: translateX(32px);
       content: "LA";
@@ -223,6 +256,9 @@
 </head>
 
 <body>
+  <!-- Background overlay -->
+  <div class="overlay"></div>
+
   <nav>
     <ul>
       <li><a href="#send-message">Communicate</a></li>
@@ -298,11 +334,11 @@
     © 2025 Byers Wall Project · Sydney / Los Angeles
   </footer>
 
-  <!-- MQTT.js library -->
+  <!-- MQTT.js -->
   <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
 
   <script>
-    // ===== Scroll-Spy =====
+    // ===== Scroll Spy =====
     const sections = document.querySelectorAll("section");
     const navLinks = document.querySelectorAll("nav a");
     window.addEventListener("scroll", () => {
@@ -319,7 +355,7 @@
       });
     });
 
-    // ===== MQTT Setup (HiveMQ Cloud) =====
+    // ===== MQTT Setup =====
     const broker = 'wss://be74244a18334e6f8fa24593173fb9f8.s1.eu.hivemq.cloud:8884/mqtt';
     const clientId = 'ByersWallSite_' + Math.random().toString(16).substr(2, 8);
     const options = {
