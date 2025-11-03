@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Byers Wall</title>
 
-  <!-- Google Fonts: Stranger Things–style -->
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Roboto:wght@300;400&display=swap" rel="stylesheet">
+  <!-- Stranger-Things-style fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Gloock&family=Roboto:wght@300;400&display=swap" rel="stylesheet">
 
   <style>
     :root {
@@ -15,93 +15,375 @@
       --grey: #1a1a1a;
     }
 
+    html { scroll-behavior: smooth; }
+
     body {
       margin: 0;
       background-color: var(--black);
+      background-image: url('images/wallpaper.png');
+      background-repeat: repeat;
+      background-size: auto;
+      background-attachment: fixed;
+      background-color: rgba(0,0,0,.94);
+      background-blend-mode: multiply;
       color: white;
       font-family: 'Roboto', sans-serif;
+      line-height: 1.6;
+    }
+
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background-color: rgba(0,0,0,0.85);
+      backdrop-filter: blur(6px);
+      border-bottom: 2px solid var(--red);
+      z-index: 1000;
+    }
+    nav ul {
+      list-style: none;
       display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-start;
-      min-height: 100vh;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin: 0;
+      padding: 0.5rem;
+      gap: 1.2rem;
+    }
+    nav a {
+      color: var(--red);
+      text-decoration: none;
+      font-weight: bold;
+      transition: color 0.2s;
+    }
+    nav a.active,
+    nav a:hover {
+      color: white;
+      text-shadow: 0 0 8px var(--red);
+    }
+
+    header {
+      padding-top: 80px;
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+    header img {
+      width: 80%;
+      max-width: 400px;
+      margin-top: 3rem;
+      filter: drop-shadow(0 0 10px var(--red));
+    }
+
+    section {
+      padding: 4rem 1rem;
+      max-width: 900px;
+      margin: 0 auto;
+      border-bottom: 1px solid #222;
+      opacity: 0;
+      transform: translateY(30px);
+      animation: fadeUp 1s ease forwards;
+    }
+    section:nth-of-type(1) { animation-delay: .2s; }
+    section:nth-of-type(2) { animation-delay: .4s; }
+    section:nth-of-type(3) { animation-delay: .6s; }
+    section:nth-of-type(4) { animation-delay: .8s; }
+    section:nth-of-type(5) { animation-delay: 1.0s; }
+    @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+
+    section h2 {
+      font-family: 'Gloock', serif;
+      color: var(--red);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      text-shadow: 0 0 6px rgba(229,9,20,0.6);
+      text-align: center;
+      margin-bottom: 1.5rem;
+      font-weight: 400;
+      opacity: 0;
+      animation: fadeTitle 2s ease forwards;
+    }
+    @keyframes fadeTitle {
+      0% { opacity: 0; text-shadow: 0 0 0 var(--red); }
+      100% { opacity: 1; text-shadow: 0 0 15px rgba(229,9,20,0.8); }
+    }
+
+    footer {
+      text-align: center;
+      color: #888;
       padding: 2rem 1rem;
     }
 
-    h1 {
-      font-family: 'Cinzel Decorative', serif;
-      font-size: 2.8rem;
-      color: var(--red);
-      text-shadow: 0 0 10px var(--red);
-      margin-bottom: 1rem;
-      text-align: center;
+    textarea {
+      width: 100%;
+      min-height: 120px;
+      border-radius: 8px;
+      border: 1px solid var(--red);
+      background: #111;
+      color: white;
+      font-size: 1rem;
+      padding: 0.8rem;
+      resize: vertical;
+    }
+    #commInput {
+      min-height: 60px;
+      resize: none;
+    }
+    #charCount {
+      display: block;
+      text-align: right;
+      font-size: 0.8rem;
+      color: #888;
+      margin-top: -0.4rem;
     }
 
-    p {
-      max-width: 600px;
-      text-align: center;
-      line-height: 1.6;
-      font-size: 1.1rem;
-      color: #ddd;
-    }
-
-    .button {
+    button {
       background-color: var(--red);
       border: none;
       color: white;
       font-weight: bold;
-      padding: 1rem 2rem;
+      padding: 0.8rem 2rem;
       border-radius: 8px;
-      font-size: 1.2rem;
-      margin-top: 2rem;
-      box-shadow: 0 0 15px rgba(229, 9, 20, 0.5);
-      transition: all 0.2s ease;
+      font-size: 1.1rem;
+      box-shadow: 0 0 10px rgba(229,9,20,0.5);
+      transition: all 0.2s;
     }
-
-    .button:hover {
+    button:hover {
       transform: scale(1.05);
-      box-shadow: 0 0 25px rgba(229, 9, 20, 0.8);
+      box-shadow: 0 0 25px rgba(229,9,20,0.8);
       cursor: pointer;
     }
 
-    footer {
-      margin-top: auto;
-      font-size: 0.9rem;
-      color: #888;
+    #commForm {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    .toggle-container {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin-bottom: 1rem;
+    }
+    .toggle {
+      position: relative;
+      display: inline-block;
+      width: 70px;
+      height: 34px;
+    }
+    .toggle input { display: none; }
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-color: #333;
+      transition: .4s;
+      border: 2px solid var(--red);
+      border-radius: 34px;
+    }
+    .slider:before {
+      position: absolute;
+      content: "SYD";
+      height: 26px;
+      width: 30px;
+      left: 4px;
+      bottom: 2px;
+      background-color: var(--red);
+      color: white;
+      font-weight: bold;
       text-align: center;
-      padding: 2rem 0 0 0;
+      line-height: 26px;
+      border-radius: 30px;
+      transition: .4s;
+    }
+    input:checked + .slider {
+      background-color: #222;
+    }
+    input:checked + .slider:before {
+      transform: translateX(32px);
+      content: "LA";
     }
 
-    /* Mobile tweaks */
+    img.setup-photo {
+      display: block;
+      margin: 1rem auto 2rem auto;
+      width: 100%;
+      max-width: 700px;
+      border-radius: 8px;
+      box-shadow: 0 0 15px rgba(229,9,20,0.3);
+    }
+
     @media (max-width: 600px) {
-      h1 {
-        font-size: 2.2rem;
-      }
-      p {
-        font-size: 1rem;
-      }
-      .button {
-        width: 90%;
-        padding: 1rem;
-      }
+      nav ul { gap: 0.8rem; }
+      header img { width: 90%; }
     }
   </style>
 </head>
 
 <body>
-  <h1>Byers Wall</h1>
+  <nav>
+    <ul>
+      <li><a href="#send-message">Communicate</a></li>
+      <li><a href="#play-show">Lights Bright</a></li>
+      <li><a href="#making-of">Making&nbsp;Of</a></li>
+      <li><a href="#setup">Setup&nbsp;/&nbsp;Info</a></li>
+      <li><a href="#feedback">Compliments&nbsp;/&nbsp;Complaints</a></li>
+    </ul>
+  </nav>
 
-  <p>
-    Welcome to the Byers Wall — an interactive light installation inspired by
-    <em>Stranger Things</em> and powered by ESP32 microcontrollers, sensors, and MQTT magic.
-  </p>
+  <header>
+    <img src="images/title.png" alt="Byers Wall Title" />
+  </header>
 
-  <button class="button" onclick="alert('Light sequence trigger coming soon!')">
-    Trigger a Light Sequence
-  </button>
+  <section id="send-message">
+    <h2>Communicate</h2>
+    <form id="commForm">
+      <div class="toggle-container">
+        <label class="toggle">
+          <input type="checkbox" id="locationToggle">
+          <span class="slider"></span>
+        </label>
+      </div>
+      <textarea id="commInput" maxlength="50" placeholder="Send a message to the other side"></textarea>
+      <small id="charCount">0 / 50</small>
+      <button type="submit">Send Message</button>
+      <p id="commStatus" style="color:#888;font-size:0.8rem;"></p>
+    </form>
+  </section>
+
+  <section id="play-show">
+    <h2>Lights Bright</h2>
+    <p>Turn up the volume and enjoy the show. (Feature coming soon!)</p>
+  </section>
+
+  <section id="making-of">
+    <h2>Making Of</h2>
+    <p>Nearly a year of tinkering distilled into a mere 3 minutes. (Coming Soon...)</p>
+  </section>
+
+  <section id="setup">
+    <h2>Setup Instructions / General Info</h2>
+    <img src="images/liveactionwall.jpg" alt="Byers Wall Live Action Setup" class="setup-photo" />
+    <p><strong>Step-by-step installation:</strong></p>
+    <ul>
+      <li>Find a wall with a free space of at least <strong>2 m wide</strong> and <strong>1.5 m tall</strong>.</li>
+      <li>Start from the bottom string, placing the letters and lights at the height you want them.</li>
+      <li>Plug in the <strong>bottom string first</strong>, <em>before</em> connecting the middle string.</li>
+      <li>On your phone, check the Wi-Fi networks — you should see <strong>BYERSWALL LA R-Z</strong>.</li>
+      <li>Join this network. A setup page will appear asking you to select a Wi-Fi network and enter a password.</li>
+      <li>Enter the office’s public Wi-Fi credentials (the same one your personal devices use).</li>
+      <li>If accepted, the lights will flash to indicate a successful connection. This only needs to be done once per string (unless Wi-Fi changes).</li>
+      <li>Test each light by moving your hand near the black sensor base — they brighten as you get closer (0–10 cm).</li>
+      <li><strong>Rejoice!</strong> 🎉</li>
+      <li>Proceed with the middle and top strings, repeating these steps.</li>
+      <li>The middle string connects to the bottom for power; the top connects to the middle.</li>
+    </ul>
+    <p><em><strong>Note:</strong> Sometimes you’ll need to try multiple times for the Wi-Fi credentials to be accepted.</em><br>
+    If it doesn’t seem to connect, unplug the string, wait 5 seconds, and plug it back in.<br>
+    The Wi-Fi network will reappear so you can try again. (At the office, one string took over five attempts — sorry it’s a little finicky!)</p>
+  </section>
+
+  <section id="feedback">
+    <h2>Compliments / Complaints / Deep Thoughts</h2>
+    <form id="messageForm">
+      <textarea id="messageInput" placeholder="A message direct to the creator of Byers Wall..."></textarea>
+      <button type="submit">Send Message</button>
+      <p id="statusMsg" style="color:#888;font-size:0.9rem;"></p>
+    </form>
+  </section>
 
   <footer>
     © 2025 Byers Wall Project · Sydney / Los Angeles
   </footer>
+
+  <!-- MQTT.js library -->
+  <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+
+  <script>
+    // ===== Scroll-Spy =====
+    const sections = document.querySelectorAll("section");
+    const navLinks = document.querySelectorAll("nav a");
+    window.addEventListener("scroll", () => {
+      let current = "";
+      sections.forEach(sec => {
+        const top = window.scrollY;
+        const offset = sec.offsetTop - 120;
+        const height = sec.offsetHeight;
+        if (top >= offset && top < offset + height) current = sec.getAttribute("id");
+      });
+      navLinks.forEach(a => {
+        a.classList.remove("active");
+        if (a.getAttribute("href") === `#${current}`) a.classList.add("active");
+      });
+    });
+
+    // ===== MQTT Setup (HiveMQ Cloud) =====
+    const broker = 'wss://be74244a18334e6f8fa24593173fb9f8.s1.eu.hivemq.cloud:8884/mqtt';
+    const clientId = 'ByersWallSite_' + Math.random().toString(16).substr(2, 8);
+    const options = {
+      clientId,
+      username: 'HiveMind',
+      password: 'donkeykong1111',
+      clean: true,
+      reconnectPeriod: 4000
+    };
+    const client = mqtt.connect(broker, options);
+    client.on('connect', () => console.log('✅ Connected to HiveMQ Cloud'));
+    client.on('error', (err) => console.error('❌ MQTT error:', err));
+
+    // ===== Communicate Sender =====
+    const commForm = document.getElementById('commForm');
+    const commInput = document.getElementById('commInput');
+    const commStatus = document.getElementById('commStatus');
+    const locationToggle = document.getElementById('locationToggle');
+    const charCount = document.getElementById('charCount');
+
+    charCount.textContent = `${commInput.value.length} / 50`;
+    commInput.addEventListener('input', () => {
+      charCount.textContent = `${commInput.value.length} / 50`;
+    });
+
+    commForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const text = commInput.value.trim();
+      if (!text) return;
+      const loc = locationToggle.checked ? 'LA' : 'SYD';
+      const topic = `BYERSWALL/${loc}/MESSAGE`;
+      client.publish(topic, text, { qos: 0, retain: false }, (err) => {
+        if (err) {
+          console.error('⚠️ Publish error:', err);
+          commStatus.textContent = '⚠️ Error sending message.';
+        } else {
+          commStatus.textContent = `✅ Sent to ${loc}`;
+          commInput.value = '';
+          charCount.textContent = '0 / 50';
+          setTimeout(() => commStatus.textContent = '', 3000);
+        }
+      });
+    });
+
+    // ===== Feedback Sender =====
+    const feedbackTopic = 'BYERSWALL/FEEDBACK';
+    const feedbackForm = document.getElementById('messageForm');
+    feedbackForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const msgBox = document.getElementById('messageInput');
+      const status = document.getElementById('statusMsg');
+      const text = msgBox.value.trim();
+      if (!text) return;
+      client.publish(feedbackTopic, text, { qos: 0, retain: false }, (err) => {
+        if (err) {
+          console.error('⚠️ Publish error:', err);
+          status.textContent = '⚠️ Error sending message.';
+        } else {
+          status.textContent = '✅ Message sent!';
+          msgBox.value = '';
+          setTimeout(() => status.textContent = '', 3000);
+        }
+      });
+    });
+  </script>
 </body>
 </html>
